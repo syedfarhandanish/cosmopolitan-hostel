@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery | Cosmopolitan Boys Hostel</title>
+    <link rel="icon" type="image/png" href="images/logot.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-auto-rows: 250px;
+            gap: 15px;
+            margin-top: 20px;
+            padding-bottom: 60px;
+        }
+
+        /* Desktop Bento Layout */
+        @media (min-width: 768px) {
+            .gallery-grid { gap: 25px; }
+            .gallery-item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+            .gallery-item:nth-child(4) { grid-row: span 2; }
+            .gallery-item:nth-child(6) { grid-column: span 2; }
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            cursor: pointer;
+            background-color: var(--primary-color);
+            opacity: 0;
+            transform: scale(0.9);
+            animation: popIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        .gallery-item:nth-child(1) { animation-delay: 0.1s; }
+        .gallery-item:nth-child(2) { animation-delay: 0.2s; }
+        .gallery-item:nth-child(3) { animation-delay: 0.3s; }
+        .gallery-item:nth-child(4) { animation-delay: 0.4s; }
+        .gallery-item:nth-child(5) { animation-delay: 0.5s; }
+        .gallery-item:nth-child(6) { animation-delay: 0.6s; }
+        .gallery-item:nth-child(7) { animation-delay: 0.7s; }
+
+        @keyframes popIn { to { opacity: 1; transform: scale(1); } }
+
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease; }
+        .gallery-item:hover img { transform: scale(1.15); opacity: 0.4; }
+        .image-caption { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.3rem; font-weight: 600; text-align: center; opacity: 0; transform: translateY(20px); transition: all 0.4s ease; pointer-events: none; text-shadow: 0 2px 10px rgba(0,0,0,0.5); padding: 10px; }
+        .gallery-item:hover .image-caption { opacity: 1; transform: translateY(0); }
+
+        /* Lightbox Slider */
+        .modal { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); opacity: 0; transition: opacity 0.3s ease; }
+        .modal.active { display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; }
+        .slider-container { position: relative; display: flex; align-items: center; justify-content: center; width: 100%; height: 75vh; margin-top: 30px; }
+        .modal-content { max-width: 85%; max-height: 100%; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); transform: scale(0.95); transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s; }
+        .modal.active .modal-content { transform: scale(1); }
+        .modal-caption { color: var(--accent-color); font-size: 1.3rem; margin-top: 15px; font-weight: 500; text-align: center; }
+        
+        .close-btn { position: absolute; top: 20px; right: 30px; color: white; font-size: 3rem; cursor: pointer; transition: color 0.3s ease; z-index: 10000; }
+        .prev-btn, .next-btn { position: absolute; top: 50%; transform: translateY(-50%); color: white; font-size: 2rem; cursor: pointer; padding: 15px; transition: all 0.3s ease; user-select: none; background: rgba(0,0,0,0.4); border-radius: 50%; z-index: 10; }
+        .prev-btn { left: 5%; }
+        .next-btn { right: 5%; }
+        .prev-btn:hover, .next-btn:hover { color: var(--accent-color); background: rgba(0,0,0,0.8); transform: translateY(-50%) scale(1.1); }
+        .close-btn:hover { color: var(--accent-color); transform: scale(1.1); }
+        
+        @media (max-width: 768px) {
+            .prev-btn { left: 2%; padding: 10px; font-size: 1.5rem; }
+            .next-btn { right: 2%; padding: 10px; font-size: 1.5rem; }
+            .modal-content { max-width: 95%; }
+            .close-btn { top: 10px; right: 20px; font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="floating-nav">
+        <div class="logo">
+            <a href="index.html"><img src="images/logo.png" alt="Logo" class="logo-img"></a>
+        </div>
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+        <div class="nav-links" id="nav-menu">
+            <a href="index.html">Home</a>
+            <a href="facilities.html">Facilities</a>
+            <a href="gallery.html" class="active">Gallery</a>
+            <a href="contact.html">Contact</a>
+        </div>
+        <div class="nav-action">
+            <a href="contact.html" class="nav-btn">Get Room</a>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <h2>Hostel Gallery</h2>
+        <p>Take a visual tour of our clean, secure, and disciplined environment.</p>
+    </div>
+
+    <div class="container">
+        <div class="gallery-grid">
+            <div class="gallery-item" onclick="openViewer(this)">
+                <img src="images/hero-bg.jpeg" alt="Hostel Exterior View">
+                <div class="image-caption">Hostel Exterior View</div>
+            </div>
+            <div class="gallery-item" onclick="openViewer(this)">
+                <img src="images/2.jpeg" alt="Lower Portion View">
+                <div class="image-caption">Lower Portion View</div>
+            </div>
+            <div class="gallery-item" onclick="openViewer(this)">
+                <img src="images/3.jpeg" alt="Upper Portion View">
+                <div class="image-caption">Upper Portion View</div>
+            </div>
+            <div class="gallery-item" onclick="openViewer(this)">
+                <img src="images/4.jpeg" alt="Outer View">
+                <div class="image-caption">Outer View</div>
+            </div>
+            <div class="gallery-item" onclick="openViewer(this)">
+                <img src="images/library.jpeg" alt="Quiet Mini Library">
+                <div class="image-caption">Mini Library</div>
+            </div>
+            <div class="gallery-item" onclick="openViewer(this)">
+                <img src="images/sports.jpeg" alt="Sports Facility">
+                <div class="image-caption">Sports Facility</div>
+            </div>
+            <div class="gallery-item" onclick="openViewer(this)">
+                <img src="images/food.jpg" alt="Hygienic Food">
+                <div class="image-caption">Hygienic Food</div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 Cosmopolitan Boys Hostel, Booni, Upper Chitral. All Rights Reserved.</p>
+    </footer>
+
+    <div id="imageViewer" class="modal">
+        <span class="close-btn" onclick="closeViewer()">×</span>
+        <div class="slider-container">
+            <i class="fas fa-chevron-left prev-btn" onclick="changeSlide(-1)"></i>
+            <img class="modal-content" id="expandedImg">
+            <i class="fas fa-chevron-right next-btn" onclick="changeSlide(1)"></i>
+        </div>
+        <div id="captionText" class="modal-caption"></div>
+    </div>
+
+    <script>
+        function toggleMenu() { document.getElementById('nav-menu').classList.toggle('active'); }
+
+        const viewer = document.getElementById("imageViewer");
+        const expandedImg = document.getElementById("expandedImg");
+        const captionText = document.getElementById("captionText");
+        const galleryItems = Array.from(document.querySelectorAll(".gallery-item"));
+        let currentIndex = 0;
+
+        function openViewer(element) {
+            currentIndex = galleryItems.indexOf(element);
+            updateSlider();
+            viewer.classList.add("active");
+            document.body.style.overflow = "hidden"; 
+        }
+
+        function changeSlide(direction) {
+            expandedImg.style.opacity = '0.5';
+            setTimeout(() => {
+                currentIndex += direction;
+                if (currentIndex >= galleryItems.length) currentIndex = 0;
+                if (currentIndex < 0) currentIndex = galleryItems.length - 1;
+                updateSlider();
+                expandedImg.style.opacity = '1';
+            }, 150); 
+        }
+
+        function updateSlider() {
+            const currentItem = galleryItems[currentIndex];
+            const imgEl = currentItem.querySelector("img");
+            expandedImg.src = imgEl.src;
+            captionText.innerHTML = imgEl.alt;
+        }
+
+        function closeViewer() {
+            viewer.classList.remove("active");
+            document.body.style.overflow = "auto";
+        }
+
+        viewer.addEventListener("click", function(e) {
+            if(e.target === viewer || e.target.classList.contains("slider-container")) closeViewer();
+        });
+        
+        document.addEventListener('keydown', function(event) {
+            if (!viewer.classList.contains("active")) return;
+            if (event.key === "Escape") closeViewer();
+            if (event.key === "ArrowRight") changeSlide(1);
+            if (event.key === "ArrowLeft") changeSlide(-1);
+        });
+    </script>
+
+</body>
+</html>
